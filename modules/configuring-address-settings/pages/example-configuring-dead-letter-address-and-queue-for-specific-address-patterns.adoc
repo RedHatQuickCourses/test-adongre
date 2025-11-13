@@ -1,0 +1,101 @@
+#  Example: Configuring dead letter address and queue for specific address patterns
+
+## Configuring Dead Letter Address and Queue for Specific Address Patterns
+
+In this section, we will demonstrate how to configure a dead letter address and queue for specific address patterns using both `brokerProperties` and `ActiveMQArtemisAddress` CR instances. A dead letter address and queue can be used by the broker to store messages that cannot be delivered to a client, preventing infinite delivery attempts. A system administrator can later consume undelivered messages from a dead letter queue to inspect the messages.
+
+### 4.2.2.1. Configuring address settings by using brokerProperties
+
+1. **Edit the ActiveMQArtemis CR instance for your broker deployment.**
+
+   Open your OpenShift cluster and navigate to the ActiveMQArtemis CR instance for your broker deployment.
+
+2. **Create a dead letter address and queue to receive undelivered messages.**
+
+   Before configuring address settings, create a dead letter address and queue to store undelivered messages. For example:
+
+   ```yaml
+   spec:
+     ...
+     addresses:
+       - name: usDeadLetterAddress
+         prefix: deadletter.
+         routingType: multicast
+   ```
+
+3. **Add separate lines under the brokerProperties attribute in the format addressSettings.<address name>.<address setting>.**
+
+   Set the dead letter address for undelivered messages to the dead letter address you created. Specify the number of delivery attempts after which a message that cannot be delivered to a matching address is sent to the dead letter address.
+
+   For example:
+
+   ```yaml
+   spec:
+     ...
+     brokerProperties:
+     ...
+     - addressSettings.usa-news.deadLetterAddress=usDeadLetter
+     - addressSettings.usa-news.maxDeliveryAttempts=5
+   ```
+
+   In this example, if the broker makes five unsuccessful attempts to deliver a message to an address that begins with `usa-news`, the broker moves the message to the specified dead letter address, `usDeadLetter`.
+
+4. **(Optional) Apply similar configuration to another address or set of addresses.**
+
+   You can use an asterisk (*) or a number sign (#) character as wildcards to create address patterns. Matching of patterns is done at each delimiter boundary, which is represented by a period (.). The number sign character matches any sequence of zero or more words.
+
+   For example:
+
+   ```yaml
+   spec:
+     ...
+     brokerProperties:
+     ...
+     - addressSettings.myOtherAddresses#.deadLetterAddress=myDeadLetterAddress
+     -#  Example: Configuring dead letter address and queue for specific address patterns
+
+## Configuring Dead Letter Address and Queue for Specific Address Patterns
+
+In this section, we will demonstrate how to configure a dead letter address and queue for specific address patterns using both `brokerProperties` and `ActiveMQArtemisAddress` CR instances. A dead letter address and queue can be used by the broker to store messages that cannot be delivered to a client, preventing infinite delivery attempts. A system administrator can later consume undelivered messages from a dead letter queue to inspect the messages.
+
+### 4.2.2.1. Configuring address settings by using brokerProperties
+
+1. **Edit the ActiveMQArtemis CR instance for your broker deployment.**
+
+   Open your OpenShift cluster and navigate to the AMQ Broker deployment's ActiveMQArtemis CR instance.
+
+2. **Create a dead letter address and queue to receive undelivered messages.**
+
+   Before configuring address settings, ensure you have a dead letter address and queue set up. For more information on creating addresses and queues using `brokerProperties`, refer to Section 4.2.1.1, “Configuring addresses and queues by using brokerProperties”.
+
+3. **Add separate lines under the brokerProperties attribute in the format addressSettings.<address name>.<address setting>.**
+
+   Set the dead letter address for undelivered messages and specify the number of delivery attempts after which a message that cannot be delivered to a matching address is sent to the dead letter address.
+
+   Here's an example:
+
+   ```yaml
+   spec:
+     ...
+     brokerProperties:
+     ...
+     - addressSettings.usDeadLetter.routingTypes=MULTICAST
+     - addressSettings.usDeadLetter.queueConfigs.usDeadLetter-queue.address=usDeadLetter
+     spec:
+       ...
+       brokerProperties:
+       ...
+       - addressSettings.usa-news.deadLetterAddress=usDeadLetter
+       - addressSettings.usa-news.maxDeliveryAttempts=5
+   ```
+
+   In this example:
+
+   - `deadLetterAddress`: The address to which the broker sends undelivered messages.
+   - `maxDeliveryAttempts`: The maximum number of delivery attempts that a broker makes before moving a message to the configured dead letter address.
+
+   If the broker makes five unsuccessful attempts to deliver a message to an address that begins with `myAddress`, the broker moves the message to the specified dead letter address, `myDeadLetterAddress`.
+
+4. **(Optional) Apply similar configuration to another address or set of addresses.**
+
+  

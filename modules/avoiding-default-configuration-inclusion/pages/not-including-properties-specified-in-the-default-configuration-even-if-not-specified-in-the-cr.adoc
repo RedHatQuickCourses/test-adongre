@@ -1,0 +1,32 @@
+#  Not including properties specified in the default configuration, even if not specified in the CR
+
+```
+== Avoiding Default Configuration Inclusion
+
+When configuring address settings for AMQ Broker on OpenShift, it's crucial to understand how to avoid including properties that are specified in the default configuration, even if those properties are not explicitly mentioned in your Custom Resource (CR). This section will detail the importance of this practice and how to implement it correctly.
+
+### Importance of Avoiding Default Configuration Inclusion
+
+Including properties from the default configuration that are not intended to be part of your specific setup can lead to unforeseen behavior or misconfigurations. By explicitly avoiding these inclusions, you maintain control over your broker's address settings, ensuring they align with your operational requirements.
+
+### Implementation
+
+To avoid including properties specified in the default configuration, follow these guidelines:
+
+1. **Specify All Address Settings in CR**: Ensure that all address settings you want to apply are explicitly defined within your CR instance. This includes any settings that might otherwise be inherited from the default configuration.
+
+2. **Use `applyRule` Property**: The `applyRule` property in your CR instance dictates how the Operator applies the configuration. By setting `applyRule` to `merge_replace`, you instruct the Operator to replace any address settings specified in the default configuration with those defined in your CR. This approach ensures that only the settings you specify are applied, effectively avoiding unintended inclusions from the default configuration.
+
+   Example:
+   ```yaml
+   applyRule: merge_replace
+   ```
+
+3. **Avoid Omitting `applyRule`**: If you do not include the `applyRule` property in your CR, the Operator defaults to `merge_all`. While `merge_all` allows for merging configurations, it does not prevent the inclusion of default configuration properties. Therefore, it's recommended to always specify `applyRule` to maintain explicit control over your configuration.
+
+4. **Review and Test Configurations**: After defining your address settings in the CR, review the configuration thoroughly. Perform testing to ensure that the broker behaves as expected and that no unintended default properties have been included.
+
+By adhering to these practices, you can confidently configure AMQ Broker address settings on OpenShift without the risk of unintended default configuration inclusions. This approach promotes clarity, predictability, and maintainability in your broker's configuration.
+```
+
+This content provides a detailed explanation of why and how to avoid

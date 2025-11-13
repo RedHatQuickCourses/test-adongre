@@ -1,0 +1,50 @@
+#  Configuring address settings under brokerProperties
+
+## Configuring Address Settings under brokerProperties
+
+In AMQ Broker on OpenShift, you can configure address settings by using the `brokerProperties` attribute in the ActiveMQArtemis CR instance for your broker deployment. This method allows you to define address settings for specific address patterns.
+
+### Step-by-step Procedure
+
+1. **Edit the ActiveMQArtemis CR instance** for your broker deployment.
+2. **Add or ensure the presence of a `brokerProperties` attribute** in the `spec` section of the CR.
+3. **Configure an address** in the format:
+   ```
+   - addressConfigurations.<address name>.routingTypes=<routing type>
+   ```
+   For example:
+   ```
+   - addressConfigurations.usa-news.routingType=multicast
+   ```
+4. **Configure a queue** for the address you created in the format:
+   ```
+   - addressConfigurations.<address name>.queueConfigs.<queue name>.address=<address>
+   ```
+   IMPORTANT: The value of `<address>` for the `.address` setting must match the `<address name>` for each queue you create. If these values are different, separate addresses are created for each. In the following example, both the address name and the `.address` setting have the same value of `usa-news-address`.
+
+   Example:
+   ```
+   - addressConfigurations.usa-news.queueConfigs.newsQueue.address=usa-news-address
+   ```
+5. **Add a separate line for each setting** you want to configure for a queue. For instance, to configure a dead letter address and queue for specific address patterns, add the following lines under the `brokerProperties` attribute:
+
+   ```
+   - addressSettings."usa-news.*".deadLetterAddress=usDeadLetter
+   - addressSettings."europe-news.#".deadLetterAddress=euDeadLetter
+   ```
+
+### Example
+
+Here's a complete example of configuring address settings under `brokerProperties`:
+
+```yaml
+spec:
+  ...
+  brokerProperties:
+  ...
+  - addressSettings."usa-news.*".deadLetterAddress=usDeadLetter
+  - addressSettings."europe-news.#".deadLetterAddress=euDeadLetter
+  - addressConfigurations.usa-news.routingType=multicast
+  - addressConfigurations.usa-news.queueConfigs.newsQueue.address=usa-news-address
+  - addressConfigurations.europe-news.routingType=anycast
+  - address

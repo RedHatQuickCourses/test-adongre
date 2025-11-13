@@ -1,0 +1,60 @@
+#  Example: merge_all
+
+```
+== Example: merge_all
+
+The `merge_all` value for the `applyRule` property specifies how the Operator applies the configuration for address settings that are specified in both the Custom Resource (CR) and the default configuration, matching the same address or set of addresses.
+
+Here's a detailed explanation of how `merge_all` works:
+
+1. **Replacement of Property Values**: When address settings match between the CR and the default configuration, `merge_all` replaces any property values specified in the default configuration with those specified in the CR.
+
+2. **Retention of Unique Property Values**: It keeps any property values that are specified uniquely in either the CR or the default configuration. These values are included in the final, merged configuration.
+
+3. **Inclusion of Unique Address Settings**: For address settings that uniquely match a particular address or set of addresses, whether specified in the CR or the default configuration, these are included in the final, merged configuration.
+
+### Practical Hands-On Activity
+
+To illustrate the use of `merge_all`, let's consider a practical example. Suppose you have the following default configuration for address settings:
+
+```yaml
+addressSettings:
+  addressSetting:
+    # Default configuration for specific addresses
+    myAddress:
+      maxConsumers: 10
+      autoCreateQueues: true
+```
+
+And you want to override these settings for `myAddress` using a CR with the following configuration:
+
+```yaml
+apiVersion: v1
+kind: ActiveMQArtemisAddress
+metadata:
+  name: myAddressConfig
+spec:
+  applyRule: merge_all
+  addressSettings:
+    addressSetting:
+      myAddress:
+        maxConsumers: 5
+        autoCreateQueues: false
+```
+
+With `applyRule` set to `merge_all`, the Operator will merge the configurations as follows:
+
+- Replace `maxConsumers` from the default value of `10` with `5` as specified in the CR.
+- Replace `autoCreateQueues` from `true` (default) with `false` as specified in the CR.
+
+The final, merged configuration for `myAddress` will be:
+
+```yaml
+addressSettings:
+  addressSetting:
+    myAddress:
+      maxConsumers: 5
+      autoCreateQueues: false
+```
+
+This example demonstrates how `merge_all` allows for selective overriding of address settings while

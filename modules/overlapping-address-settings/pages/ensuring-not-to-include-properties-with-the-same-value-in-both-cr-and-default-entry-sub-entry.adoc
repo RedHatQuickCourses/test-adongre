@@ -1,0 +1,27 @@
+#  Ensuring not to include properties with the same value in both CR and default Entry Sub-entry
+
+```
+== Avoiding Default Configuration Inclusion
+
+When configuring address settings for AMQ Broker on OpenShift, it's crucial to avoid including properties with the same value in both the Custom Resource (CR) and the default Entry Sub-entry. This practice ensures that your custom configurations override the default settings as intended.
+
+### Why Avoid Duplicate Properties?
+
+Duplicate properties with the same value in both the CR and the default Entry Sub-entry can lead to unpredictable behavior. The Operator might not apply your custom configurations correctly, resulting in unexpected outcomes. To prevent such issues, you should explicitly manage which properties are included in your CR.
+
+### Best Practices
+
+1. **Review Default Configuration**: Familiarize yourself with the default configuration properties to understand what values you might inadvertently duplicate.
+
+2. **Specify Unique Properties**: Ensure that each property specified in your CR has a unique value compared to the default configuration.
+
+3. **Use `applyRule` Property**: Leverage the `applyRule` property to control how the Operator applies your configuration. This property helps manage merging configurations from the CR and the default Entry Sub-entry.
+
+4. **Test Thoroughly**: After implementing your custom configurations, perform comprehensive testing to verify that the broker behaves as expected.
+
+### Example
+
+Suppose you want to configure a dead letter address and queue for specific address patterns. If these settings are already present in the default configuration with the same values, including them in your CR will not override them. To ensure your custom settings take effect, either adjust the values or use the `applyRule` property to dictate how the Operator merges configurations.
+
+By adhering to these guidelines, you can maintain control over your AMQ Broker address settings on OpenShift, avoiding conflicts and ensuring your configurations are applied correctly.
+```

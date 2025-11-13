@@ -1,0 +1,45 @@
+#  match property
+
+```
+== match Property
+
+The `match` property is a crucial component in configuring address settings for AMQ Broker on OpenShift. It allows you to specify a pattern that matches addresses to which the configuration applies. This property is used within both the `brokerProperties` attribute in the ActiveMQArtemis CR instance and the `addressSettings` section of the ActiveMQArtemis CR instance.
+
+### Syntax
+
+When using the `match` property, the value must be enclosed in single quotation marks. For example:
+
+```
+'myOtherAddresses#'
+```
+
+### Usage
+
+The `match` property uses a string that matches address settings to addresses configured on the broker. You can specify an exact address name or use a wildcard expression to match the address settings to a set of addresses.
+
+#### Wildcard Expressions
+
+If you use a wildcard expression as a value for the `match` property, you must enclose the value in single quotation marks. The asterisk character (*) can be used anywhere within the address string and matches any word.
+
+Here are some examples:
+
+- `usa-news.*` matches addresses like `usa-news.domestic` and `usa-news.intl`, but not `usa-news.domestic.politics`.
+- `europe-news.#` matches addresses that start with `europe-news`, such as `europe-news`, `europe-news.politics`, and `europe-news.politics.fr`.
+
+#### Reserved Characters
+
+In `brokerProperties` entries, a period (.) is a reserved character. If you want to create an address pattern that contains a period, you must enclose the address in quotation marks. For example:
+
+```
+"usa-news.*"
+```
+
+### Hands-on Activity
+
+1. Open your OpenShift environment and navigate to the AMQ Broker configuration.
+2. Locate the `brokerProperties` attribute or `addressSettings` section, depending on your configuration method.
+3. Add a new entry for address settings and include the `match` property.
+4. Specify a pattern using a wildcard expression, ensuring it is enclosed in single quotation marks.
+5. Save the configuration and verify that no errors were detected in the `status` section of the ActiveMQArtemis CR.
+
+By understanding and effectively using

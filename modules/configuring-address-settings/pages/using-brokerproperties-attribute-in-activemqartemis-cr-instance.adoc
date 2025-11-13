@@ -1,0 +1,33 @@
+#  Using brokerProperties attribute in ActiveMQArtemis CR instance
+
+## Using brokerProperties Attribute in ActiveMQArtemis CR Instance
+
+The `brokerProperties` attribute in the ActiveMQArtemis Custom Resource (CR) instance allows you to configure address settings for your AMQ Broker deployment on OpenShift. This method is particularly useful when you need to apply custom configurations that are not exposed through a custom resource definition (CRD).
+
+### Configuring Address Settings under brokerProperties
+
+To configure address settings using the `brokerProperties` attribute, follow these steps:
+
+1. **Edit the Custom Resource (CR):** Begin by editing the CR for your broker deployment.
+
+2. **Specify Plugin and Properties:** In the `brokerProperties` attribute, specify the class name of the plugin you want to register. Include a comma-separated string of `<key>=<value>` pairs that define the properties for the plugin. For example, to register the `LoggingActiveMQServerPlugin` provided with AMQ Broker, you would include the following:
+
+   ```
+   brokerProperties:
+     - LoggingActiveMQServerPlugin.config.myKey1=myValue1,LoggingActiveMQServerPlugin.config.myKey2=myValue2
+   ```
+
+3. **Save the CR:** After specifying the plugin and properties, save the CR. An instance of the plugin will be created, and its `init` method will be passed a string containing the `<key>=<value>` pairs to set properties for the plugin.
+
+4. **Check for Errors:** To ensure no errors were detected in the `brokerProperties` configuration, review the `status` section of the ActiveMQArtemis CR. For more information, refer to Section 2.4, “Configuring items not exposed in a custom resource definition (CRD)”.
+
+### Example: Configuring Dead Letter Address and Queue
+
+Let's consider an example where you want to configure a dead letter address and queue for specific address patterns. You can achieve this by using the `brokerProperties` attribute as follows:
+
+1. **Edit the CR:** Start by editing the CR for your broker deployment.
+
+2. **Specify Plugin and Properties:** In the `brokerProperties` attribute, include the necessary properties for the `org.apache.activemq.artemis.jms.server.impl.JMSServerPluginManager` plugin. For instance, to configure a dead letter address and queue for addresses matching the pattern `myOtherAddresses#`, use the following configuration:
+
+   ```
+   brokerProperties:

@@ -1,0 +1,19 @@
+#  Specifying how the Operator applies the configuration
+
+```
+== Specifying How the Operator Applies the Configuration
+
+When configuring address settings for AMQ Broker on OpenShift, it's crucial to understand how the Operator applies the custom configurations you add to the Custom Resource (CR). This is controlled by the `applyRule` property within the `addressSettings` section of the ActiveMQArtemis CR instance.
+
+The `applyRule` property specifies the method by which the Operator merges or replaces the configuration that you add in the CR with the default configuration. The possible values for `applyRule` are:
+
+- **merge_all**: This is the default value if `applyRule` is not specified. With this setting, for any address or set of addresses that match both the CR and the default configuration, the Operator replaces the property values from the default configuration with those specified in the CR. It also keeps any property values that are specified uniquely in the CR or the default configuration, including each of these in the final, merged configuration. For address settings that uniquely match a particular address or set of addresses in either the CR or the default configuration, the Operator includes these in the final, merged configuration.
+
+- **merge_replace**: This option ensures that for address settings specified in both the CR and the default configuration that match the same address or set of addresses, the settings specified in the CR are included in the final, merged configuration. Any properties specified in the default configuration are not included, even if they are not specified in the CR. Unique address settings in either the CR or the default configuration are included in the final configuration.
+
+- **replace_all**: With this setting, all address settings specified in the default configuration are replaced with those specified in the CR. The final, merged configuration corresponds exactly to the configuration specified in the CR.
+
+It's important to note that if you do not explicitly include the `applyRule` property in your CR, the Operator defaults to using `merge_all`.
+
+Understanding and correctly using the `applyRule` property ensures that your custom address settings are applied as intended, avoiding unintended overrides or conflicts with the default configuration.
+```

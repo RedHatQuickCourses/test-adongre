@@ -1,0 +1,9 @@
+#  Avoiding Default Configuration Inclusion
+
+- **Avoiding Default Configuration Inclusion** ensures that properties specified in the default configuration are not included in the final, merged configuration, even if they are not explicitly defined in the Custom Resource (CR).
+- This practice is crucial to prevent unintended overrides of custom configurations by default settings.
+- It applies to address settings specified in either the CR or the default Entry Sub-entry that match the same address or set of addresses.
+- If a property is uniquely specified in the CR or the default configuration, it will be included in the final, merged configuration.
+- The `applyRule` property in the CR determines how the Operator applies the configuration, with `merge_all` being the default value.
+- Other `applyRule` options include `merge_replace` and `replace_all`, which provide more control over the merging process.
+- Understanding and correctly implementing `avoiding default configuration inclusion` is essential for maintaining desired broker configurations on OpenShift.

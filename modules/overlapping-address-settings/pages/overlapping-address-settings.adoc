@@ -1,0 +1,11 @@
+#  Overlapping Address Settings
+
+Overlapping Address Settings in AMQ Broker on OpenShift involves managing configurations when properties with the same value exist in both the Custom Resource (CR) and the default configuration, matching the same address or set of addresses. The key points are:
+
+- Ensure no properties with identical values overlap in the CR and default configuration for the same address or set of addresses.
+- If overlap occurs, use the 'applyRule' property in the CR to dictate how the Operator should handle the configuration.
+- The 'applyRule' property values are 'merge_all' and 'merge_replace'.
+  - 'merge_all' replaces default property values with those specified in the CR, keeps unique CR or default configuration properties, and merges them.
+  - 'merge_replace' includes CR settings and excludes default configuration properties for overlapping addresses.
+- The 'match' property requires enclosing its value in single quotation marks.
+- Proper management of overlapping address settings prevents unintended configuration inclusions.

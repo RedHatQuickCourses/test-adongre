@@ -1,0 +1,28 @@
+#  Enclosing value in single quotation marks, for example, myOtherAddresses#
+
+### Enclosing Value in Single Quotation Marks
+
+When configuring address settings for AMQ Broker on OpenShift, it is crucial to enclose specific values in single quotation marks. This practice applies primarily to the `match` property within the `addressSettings` section of the ActiveMQArtemis CR (Custom Resource).
+
+#### Why Use Single Quotation Marks?
+
+Single quotation marks are used to denote string literals in YAML, which is the format used for defining Custom Resources in OpenShift. This ensures that the value is treated as a string and not interpreted as a YAML construct.
+
+#### Example
+
+Consider the following example where we want to configure address settings for addresses that start with `myOtherAddresses`:
+
+```yaml
+match: 'myOtherAddresses#'
+deadLetterAddress: myDeadLetterAddress
+maxDeliveryAttempts: 3
+```
+
+In this example, `'myOtherAddresses#'` is enclosed in single quotation marks. This tells the Operator to interpret `myOtherAddresses#` as a literal string rather than a pattern or a YAML keyword.
+
+#### Important Notes
+
+- **Hash Wildcard Character (#):** The hash character (#) is a wildcard that matches any substring following `myOtherAddresses`. For instance, it would match addresses like `myOtherAddresses.domestic` and `myOtherAddresses.intl`, but not `myOtherAddresses.domestic.politics`.
+- **Reserved Characters:** If your address pattern contains characters that have special meaning in YAML (like periods), enclose the entire address pattern in quotation marks to avoid interpretation issues. For example, use `"usa-news.*"` instead of `usa-news.*`.
+
+By correctly enclosing values in single quotation marks, you ensure that your address settings are applied as intended, preventing potential configuration errors due to misinterpretation of strings. Always refer to the provided context and examples to maintain consistency and accuracy in your configurations.

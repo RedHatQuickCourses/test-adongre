@@ -1,0 +1,43 @@
+#  applyRule property
+
+## applyRule Property
+
+The `applyRule` property is a crucial component in configuring address settings for AMQ Broker on OpenShift. It dictates how the Operator applies the configuration specified in your Custom Resource (CR) instance to the existing default configuration for each matching address or set of addresses.
+
+### Values for applyRule
+
+You can specify one of the following values for the `applyRule` property:
+
+- **merge_all**: This value instructs the Operator to replace any property values specified in the default configuration with those specified in the CR for address settings that match the same address or set of addresses. It also keeps any property values that are specified uniquely in the CR or the default configuration and includes each of these in the final, merged configuration. Furthermore, for address settings specified in either the CR or the default configuration that uniquely match a particular address or set of addresses, it includes these in the final, merged configuration.
+
+- **merge_replace**: This value tells the Operator to include the settings specified in the CR in the final, merged configuration for address settings that match the same address or set of addresses. It does not include settings from the default configuration.
+
+### Using applyRule
+
+To use the `applyRule` property, follow these steps:
+
+1. At the beginning of the `addressSettings` section in your CR instance, add the `applyRule` property and specify a value. For example:
+
+   ```
+   spec:
+     ...
+     addressSettings:
+       applyRule: merge_all
+       addressSetting:
+         - match:
+             myAddress
+            deadLetterAddress:
+               myDeadLetterAddress
+              maxDeliveryAttempts: 5
+         - match:
+             'myOtherAddresses#'
+            deadletterAddress:
+               myDeadLetterAddress
+              maxDeliveryAttempts: 3
+   ```
+
+2. Based on the value of the `applyRule` property in the CR, the Init Container will merge or replace the default address settings configuration with the configuration specified in the CR. The result is the final address settings configuration that the broker will use.
+
+3. When the Init Container finishes generating the broker configuration, including address settings, the broker application container starts. The broker container then copies its configuration from the installation directory previously used by the Init Container. You can inspect the address settings configuration in the `broker.xml` configuration file, located in the `/home/jboss/amq-broker/etc` directory for a running broker.
+
+By understanding and

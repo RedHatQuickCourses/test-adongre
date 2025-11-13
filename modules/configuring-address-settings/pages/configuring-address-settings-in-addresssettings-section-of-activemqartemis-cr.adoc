@@ -1,0 +1,45 @@
+#  Configuring address settings in addressSettings section of ActiveMQArtemis CR
+
+## Configuring Address Settings in addressSettings Section of ActiveMQArtemis CR
+
+In this section, we will focus on configuring address settings using the `addressSettings` section within the `ActiveMQArtemis` Custom Resource (CR) instance. This method is particularly useful when you have already created an `ActiveMQArtemisAddress` CR for your addresses and queues.
+
+### Prerequisites
+
+Before proceeding, ensure that you have:
+
+1. Created an address and queue with specific details. For this example, let's assume you have an address named `myDeadLetterAddress` and a queue named `myDeadLetterQueue` with the routing type set to `anycast`. For more information on creating addresses and queues, refer to [Section 4.2.1, “Configuring addresses and queues”](link-to-section-4.2.1).
+2. Deployed a basic broker instance. For more information, refer to [Section 3.4.1, “Deploying a basic broker instance”](link-to-section-3.4.1).
+
+### Procedure
+
+1. **Edit the ActiveMQArtemis CR instance for your broker deployment.**
+
+   Open your ActiveMQArtemis CR instance in a text editor.
+
+2. **Add or locate the `brokerProperties` attribute** in the CR's `spec` section if it is not already present.
+
+3. **Configure address settings in the `addressSettings` section.**
+
+   Add the following configuration to specify address settings for specific address patterns:
+
+   ```
+   - addressSettings.
+     'myOtherAddresses#'
+       .deadLetterAddress = 'usDeadLetter'
+     - addressSettings.
+       'europe-news.#'
+       .deadLetterAddress = 'euDeadLetter'
+   ...
+   ```
+
+   In this example, we are configuring a dead letter address and queue for specific address patterns:
+
+   - For addresses matching the pattern `myOtherAddresses#`, the dead letter address is set to `usDeadLetter`.
+   - For addresses matching the pattern `europe-news.#`, the dead letter address is set to `euDeadLetter`.
+
+4. **Save the CR.**
+
+5. **Verify the configuration.**
+
+   Check that no errors were detected in the `brokerProperties` configuration by reviewing the `status` section of the ActiveMQArtemis CR. For more information, see [Section 2.4, “Configuring items not exposed in a

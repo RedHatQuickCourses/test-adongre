@@ -1,0 +1,46 @@
+#  Using ActiveMQArtemisAddress CR instance
+
+== Using ActiveMQArtemisAddress CR instance
+
+In addition to configuring address settings using the `brokerProperties` attribute in the `ActiveMQArtemis` CR instance, you can also utilize the `ActiveMQArtemisAddress` CR instance. This method allows you to configure address settings specifically within the `addressSettings` section of the `ActiveMQArtemis` CR.
+
+### Configuring address settings in addressSettings section
+
+To configure address settings using the `ActiveMQArtemisAddress` CR instance, follow these steps:
+
+1. **Edit the ActiveMQArtemis CR instance** for your broker deployment.
+2. In the `spec` section of the CR, locate or add the `addressSettings` attribute if it is not already present.
+3. Configure address settings within the `addressSettings` section.
+
+### Example: Configuring dead letter address and queue for specific address patterns
+
+Let's consider an example where you want to configure a dead letter address and queue for specific address patterns. A dead letter address and queue can be used by the broker to store messages that cannot be delivered to a client, preventing infinite delivery attempts. A system administrator can later consume undelivered messages from a dead letter queue to inspect the messages.
+
+#### Prerequisites
+
+- You have created an address and queue with the following details:
+  - `addressName`: `myDeadLetterAddress`
+  - `queueName`: `myDeadLetterQueue`
+  - `routingType`: `anycast`
+
+For information on creating addresses and queues, refer to Section 4.2.1, “Configuring addresses and queues”.
+
+#### Procedure
+
+1. Edit the `ActiveMQArtemis` CR instance for your broker deployment.
+2. In the `spec` section of the CR, add or locate the `addressSettings` attribute.
+3. Configure the address settings as follows:
+
+```yaml
+addressSettings:
+  # Apply the rule to addresses matching the pattern 'myOtherAddresses#'
+  match: 'myOtherAddresses#'
+  applyRule: 'merge_all'
+
+  # Configure dead letter address and queue for the matching addresses
+  deadLetterQueue:
+    queueName: 'myDeadLetterQueue'
+    address: 'myDeadLetterAddress'
+```
+
+In this example, the `match` property specifies the address pattern (`myOtherAddresses#`) to which the configuration applies. The `applyRule` property determines how the Operator applies the
