@@ -177,31 +177,46 @@
 </aside>
 <article class="doc">
 <h1 class="page">Ensuring not to include properties with the same value in both CR and default Entry Sub-entry</h1>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">== Avoiding Default Configuration Inclusion
-
-When configuring address settings for AMQ Broker on OpenShift, it's crucial to avoid including properties with the same value in both the Custom Resource (CR) and the default Entry Sub-entry. This practice ensures that your custom configurations override the default settings as intended.
-
-### Why Avoid Duplicate Properties?
-
-Duplicate properties with the same value in both the CR and the default Entry Sub-entry can lead to unpredictable behavior. The Operator might not apply your custom configurations correctly, resulting in unexpected outcomes. To prevent such issues, you should explicitly manage which properties are included in your CR.
-
-### Best Practices
-
-1. **Review Default Configuration**: Familiarize yourself with the default configuration properties to understand what values you might inadvertently duplicate.
-
-2. **Specify Unique Properties**: Ensure that each property specified in your CR has a unique value compared to the default configuration.
-
-3. **Use `applyRule` Property**: Leverage the `applyRule` property to control how the Operator applies your configuration. This property helps manage merging configurations from the CR and the default Entry Sub-entry.
-
-4. **Test Thoroughly**: After implementing your custom configurations, perform comprehensive testing to verify that the broker behaves as expected.
-
-### Example
-
-Suppose you want to configure a dead letter address and queue for specific address patterns. If these settings are already present in the default configuration with the same values, including them in your CR will not override them. To ensure your custom settings take effect, either adjust the values or use the `applyRule` property to dictate how the Operator merges configurations.
-
-By adhering to these guidelines, you can maintain control over your AMQ Broker address settings on OpenShift, avoiding conflicts and ensuring your configurations are applied correctly.</code></pre>
+<div class="sect1">
+<h2 id="_avoiding_default_configuration_inclusion"><a class="anchor" href="#_avoiding_default_configuration_inclusion"></a>Avoiding Default Configuration Inclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When configuring address settings for AMQ Broker on OpenShift, it&#8217;s crucial to avoid including properties with the same value in both the Custom Resource (CR) and the default Entry Sub-entry. This practice ensures that your custom configurations override the default settings as intended.</p>
+</div>
+<div class="sect2">
+<h3 id="_why_avoid_duplicate_properties"><a class="anchor" href="#_why_avoid_duplicate_properties"></a>Why Avoid Duplicate Properties?</h3>
+<div class="paragraph">
+<p>Duplicate properties with the same value in both the CR and the default Entry Sub-entry can lead to unpredictable behavior. The Operator might not apply your custom configurations correctly, resulting in unexpected outcomes. To prevent such issues, you should explicitly manage which properties are included in your CR.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_best_practices"><a class="anchor" href="#_best_practices"></a>Best Practices</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Review Default Configuration</strong>: Familiarize yourself with the default configuration properties to understand what values you might inadvertently duplicate.</p>
+</li>
+<li>
+<p><strong>Specify Unique Properties</strong>: Ensure that each property specified in your CR has a unique value compared to the default configuration.</p>
+</li>
+<li>
+<p><strong>Use <code>applyRule</code> Property</strong>: Leverage the <code>applyRule</code> property to control how the Operator applies your configuration. This property helps manage merging configurations from the CR and the default Entry Sub-entry.</p>
+</li>
+<li>
+<p><strong>Test Thoroughly</strong>: After implementing your custom configurations, perform comprehensive testing to verify that the broker behaves as expected.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_example"><a class="anchor" href="#_example"></a>Example</h3>
+<div class="paragraph">
+<p>Suppose you want to configure a dead letter address and queue for specific address patterns. If these settings are already present in the default configuration with the same values, including them in your CR will not override them. To ensure your custom settings take effect, either adjust the values or use the <code>applyRule</code> property to dictate how the Operator merges configurations.</p>
+</div>
+<div class="paragraph">
+<p>By adhering to these guidelines, you can maintain control over your AMQ Broker address settings on OpenShift, avoiding conflicts and ensuring your configurations are applied correctly.</p>
+</div>
+</div>
 </div>
 </div>
 <nav class="pagination">
